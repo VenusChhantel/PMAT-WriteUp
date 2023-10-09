@@ -12,39 +12,39 @@
 
 # Analysis:
 
-Office Documents files are typically used as initial stagers that will no
+The analysis was started 
 
-`oleid sheetsForFinancial.xlsm
-
-oleid 0.60.dev1 - http://decalage.info/oletools
-THIS IS WORK IN PROGRESS - Check updates regularly!
-Please report any issue at https://github.com/decalage2/oletools/issues
-
-Filename: sheetsForFinancial.xlsm
---------------------+--------------------+----------+--------------------------
-Indicator           |Value               |Risk      |Description
---------------------+--------------------+----------+--------------------------
-File format         |MS Excel 2007+      |info      |
-                    |Macro-Enabled       |          |
-                    |Workbook (.xlsm)    |          |
---------------------+--------------------+----------+--------------------------
-Container format    |OpenXML             |info      |Container type
---------------------+--------------------+----------+--------------------------
-Encrypted           |False               |none      |The file is not encrypted
---------------------+--------------------+----------+--------------------------
-VBA Macros          |Yes, suspicious     |HIGH      |This file contains VBA
-                    |                    |          |macros. Suspicious
-                    |                    |          |keywords were found. Use
-                    |                    |          |olevba and mraptor for
-                    |                    |          |more info.
---------------------+--------------------+----------+--------------------------
-XLM Macros          |No                  |none      |This file does not contain
-                    |                    |          |Excel 4/XLM macros.
---------------------+--------------------+----------+--------------------------
-External            |0                   |none      |External relationships
-Relationships       |                    |          |such as remote templates,
-                    |                    |          |remote OLE objects, etc
---------------------+--------------------+----------+--------------------------
+ oleid sheetsForFinancial.xlsm
+ 
+    oleid 0.60.dev1 - http://decalage.info/oletools
+    THIS IS WORK IN PROGRESS - Check updates regularly!
+    Please report any issue at https://github.com/decalage2/oletools/issues
+    
+    Filename: sheetsForFinancial.xlsm
+    --------------------+--------------------+----------+--------------------------
+    Indicator           |Value               |Risk      |Description
+    --------------------+--------------------+----------+--------------------------
+    File format         |MS Excel 2007+      |info      |
+                        |Macro-Enabled       |          |
+                        |Workbook (.xlsm)    |          |
+    --------------------+--------------------+----------+--------------------------
+    Container format    |OpenXML             |info      |Container type
+    --------------------+--------------------+----------+--------------------------
+    Encrypted           |False               |none      |The file is not encrypted
+    --------------------+--------------------+----------+--------------------------
+    VBA Macros          |Yes, suspicious     |HIGH      |This file contains VBA
+                        |                    |          |macros. Suspicious
+                        |                    |          |keywords were found. Use
+                        |                    |          |olevba and mraptor for
+                        |                    |          |more info.
+    --------------------+--------------------+----------+--------------------------
+    XLM Macros          |No                  |none      |This file does not contain
+                        |                    |          |Excel 4/XLM macros.
+    --------------------+--------------------+----------+--------------------------
+    External            |0                   |none      |External relationships
+    Relationships       |                    |          |such as remote templates,
+                        |                    |          |remote OLE objects, etc
+    --------------------+--------------------+----------+--------------------------
 
 
 
