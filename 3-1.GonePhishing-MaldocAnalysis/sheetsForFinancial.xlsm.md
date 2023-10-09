@@ -120,4 +120,7 @@ Again using the oledump tool, the macro from stream 3 was dumped using the comma
             End Sub
 
 
-From the VBScipt, it can be seen that, from its C2 'srv3.wonderballfinancial.local', it downloads 'abc123.crt' and save it as 'encd.crt'. It then uses certutil to decode 'encd.crt' and then save it as a PowershellScript 'run.ps1'. And then executes 'run.ps1' script by allowing execution of the unsigned PowerShell script and by hidding the its window.  
+From the VBScipt, it can be seen that: 
+- From its C2 'srv3.wonderballfinancial.local', it downloads 'abc123.crt' and save it as 'encd.crt'. 
+- It then uses certutil to decode 'encd.crt' and then save it as a PowershellScript 'run.ps1'. 
+- Finally, it executes 'run.ps1' script by allowing execution of the unsigned PowerShell script and by hiding its window.  
