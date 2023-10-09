@@ -1,9 +1,9 @@
-## simpleAntiAnalysis-cpp.exe
+# simpleAntiAnalysis-cpp.exe
 
-# Identification:
+## Identification:
 
 
-# Analysis:
+## Analysis:
 
 The sample was loaded in Cutter and then was jumped to WinMin function as shown below.
 
@@ -13,7 +13,7 @@ First there is call to **IsDebuggerPresent** windows API. The return value of it
 
 Documentation on **IsDebuggerPresent**: https://learn.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-isdebuggerpresent
 
-**First Case: With Debugger**
+### First Case: With Debugger
 
 when the sample is being debugged, the return value from **IsDebuggerPresent** windows API call will be non-zero. The non-zero return value (1) will be stored in eax.
 
@@ -27,7 +27,7 @@ jz            -> Will jump to location if ZF=1. Since, ZF=0, it will not take th
 
 The program flow will continue towards with red arrow detecting the debugger. And using **MessageBox** windows API, it will print "Oh, you think you're slick, huh? I see your debugger over there. No soup for you!". 
 
-**Second Case: Without Debugger**
+### Second Case: Without Debugger
 
 When the sample is not being debugged, the return value from **IsDebuggerPresent** windows API call will be zero. The zero return value (0) will be stored in eax.
 
@@ -41,7 +41,7 @@ jz            -> Will jump to location if ZF=1. Since, ZF=1, it will take the ju
 
 The program flow will continue towards with green arrow. And using **MessageBox** windows API, it will print "No debugger detected! Cowabunga, dudes!". 
 
-**Defeating Anti-Debugging**
+### Defeating Anti-Debugging
 
 The sample was loaded to the x32dbg and breakpoint was added to the **IsDebuggerPresent** API with command below.
 
@@ -51,7 +51,7 @@ In x32dbg, the sample was run with F9 till it reach the breakpoint on **IsDebugg
 
 With this the Anti-Debugging technique using **IsDebuggerPresent** API can be defeated.
 
-# Detection with YARA Rule:
+## Detection with YARA Rule:
 
     rule AntiDebugging{
     meta:
