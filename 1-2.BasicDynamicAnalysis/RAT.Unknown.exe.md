@@ -120,6 +120,3 @@ A command 'whoami' was entered which again output base64 encoded value, which on
 
 <image src="../Images/RAT.Unknown.exe11.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
-
-
-
