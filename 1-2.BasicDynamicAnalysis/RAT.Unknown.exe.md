@@ -111,7 +111,7 @@ In the Process Monitor capture, it can be seen that the sample is saving 'mscord
 
 <image src="../Images/RAT.Unknown.exe5.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
-It seems like the sample will try to connect to serv1[.]ec2-102-95-13-2-ubuntu[.]local in order to request 'msdcorelib.exe' and downloaded it under startup folder as 'mscordll.exe' so that it's executed everytime during startup as persistance mechanism.
+It seems like the sample will try to connect to serv1[.]ec2-102-95-13-2-ubuntu[.]local in order to request 'msdcorelib.exe' and downloaded it under startup folder as 'mscordll.exe' so that it's executed everytime during startup as persistance mechanism. Also note that the executable dropped is the INetSim binary not the actual binary.
 
 <br>
 
