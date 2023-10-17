@@ -12,7 +12,7 @@
 
 ## Analysis:
 
-### Static Analysis
+### Basic Static Analysis:
 
 For the initial triage, the sample was loaded in PEStudio as shown below.
 
@@ -89,7 +89,7 @@ The interesting strings found were:
 
 <br>
 
-### Dynamic Analysis
+### Basic Dynamic Analysis:
 
 The sample was then executed for dynamic analysis. On execution, it try to reach serv1[.]ec2-102-95-13-2-ubuntu[.]local as shown in the Wireshark capture below. Since the lab was isolated with no network simulation active, the resolution to that domain fail making the sample unable to reach it.
 
@@ -103,7 +103,7 @@ When the sample fail to reach that domain, it exited with message 'NO SOUP FOR Y
 
 Now in Remnux machine, INetSim was runned for network simulation. After that the sample was executed again. 
 
-This time, the sample again try to reach serv1[.]ec2-102-95-13-2-ubuntu[.]local and successfully resolute to IP of the Remnux machine and start connection over 80 and request 'msdcorelib.exe' as shown in Wireshark capture. 
+This time, the sample again try to reach serv1[.]ec2-102-95-13-2-ubuntu[.]local and successfully resolute to IP of the Remnux machine and start connection over port 80 and request 'msdcorelib.exe' as shown in Wireshark capture. 
 
 <image src="../Images/RAT.Unknown.exe4.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
@@ -115,11 +115,11 @@ It seems like the sample will try to connect to serv1[.]ec2-102-95-13-2-ubuntu[.
 
 <br>
 
-Furthermore, when checking the process TCP/IP under Process Explorer, it was listening on port 5555 as shown below. 
+Furthermore, when checking the process TCP/IP under Process Explorer, it was listening on port 5555 as shown below. This could actually be a bind shell.
 
 <image src="../Images/RAT.Unknown.exe6.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
-From the remnux machine, it was then to connected to that port using netcat where it output some base64 encoded value as shown below.
+To verify it that was bind shell, it was connected to that port from Remnux machine using netcat where it output some base64 encoded value as shown below.
 
 <image src="../Images/RAT.Unknown.exe7.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
