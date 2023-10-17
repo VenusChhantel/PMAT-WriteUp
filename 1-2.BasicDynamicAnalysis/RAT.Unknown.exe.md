@@ -23,6 +23,8 @@ Followings were found:
 - The sampole is 64-bit and has GUI interface.
 - The sample was compiled on Sun Sep 12 09:30:09 2021.
 
+<br>
+
 Then using capa tool, the sample was analyzed to check its behavior with the command:
 
 `capa RAT.Unknown.exe`
@@ -67,6 +69,8 @@ Then using capa tool, the sample was analyzed to check its behavior with the com
 - The sample has Base64 encoded strings.
 - The sample may have persistence by adding under Run key or start-up folder.
 
+<br>
+
 Then the strings were checked using the FLOSS tool with the command:
 
 `floss.exe RAT.Unknown.exe`
@@ -95,6 +99,8 @@ When the sample fail to reach that domain, it exited with message 'NO SOUP FOR Y
 
 <image src="../Images/RAT.Unknown.exe3.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
+<br>
+
 Now in Remnux machine, INetSim was runned for network simulation. After that the sample was executed again. 
 
 This time, the sample again try to reach serv1[.]ec2-102-95-13-2-ubuntu[.]local and successfully resolute to IP of the Remnux machine and start connection over 80 and request 'msdcorelib.exe' as shown in Wireshark capture. 
@@ -106,6 +112,8 @@ In the Process Monitor capture, it can be seen that the sample is saving 'mscord
 <image src="../Images/RAT.Unknown.exe5.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
 It seems like the sample will try to connect to serv1[.]ec2-102-95-13-2-ubuntu[.]local in order to request 'msdcorelib.exe' and downloaded it under startup folder as 'mscordll.exe' so that it's executed everytime during startup as persistance mechanism.
+
+<br>
 
 Furthermore, when checking the process TCP/IP under Process Explorer, it was listening on port 5555 as shown below. 
 
@@ -133,10 +141,28 @@ A command 'whoami' was entered which again output base64 encoded value, which on
 - serv1.ec2-102-95-13-2-ubuntu.local
 
 ## Host-based Indicators:
-- AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\mscordll.exe
+- mscordll.exe
+- msdcorelib.exe
 
 <br>
 
 # Detection with YARA Rule:
 
-x
+    rule RAT_Unknown_Exe{
+        meta:
+                author= "Venus Chhantel"
+                description= "RAT.Unknown.exe"
+        strings:
+                $file1 = "mscordll.exe"
+                $file2 = "msdcorelib.exe"
+                $message = "what command can I run for you"
+                $C2 = "serv1.ec2-102-95-13-2-ubuntu.local"
+    
+        condition:
+                uint16(0) == 0x5A4D and
+                (
+                        any of ($file*) and
+                        $message and
+                        $C2
+                )
+        }
