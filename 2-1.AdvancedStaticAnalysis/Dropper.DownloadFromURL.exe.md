@@ -89,19 +89,26 @@ The interesting strings found were:
 
 The sample was then executed for dynamic analysis. Before execution of samples, tools like Process Monitor, Process Explorer and Wireshark were also runned for behavior analysis. 
 
-After execution, the sample tried to reach ssl-6582datamanager[.]helpdeskbros[.]local. Since the lab was isolated with no network simulation active, the resolution of the domain that the sample was trying to reach failed as shown in Wireshark below. 
+The sample was then executed for dynamic analysis. On execution, it try to reach ssl-6582datamanager[.]helpdeskbros[.]local as shown in the Wireshark capture below. Since the lab was isolated with no network simulation active, the resolution to that domain fail making the sample unable to reach it.
 
 <image src="../Images/Malware.Unknown.exe2.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
-After the sample failed to reach ssl-6582datamanager[.]helpdeskbros[.]local, it deleted itself as shown in Process Monitor log.
+After the sample failed to reach ssl-6582datamanager[.]helpdeskbros[.]local, it deleted itself as shown in Process Monitor capture.
 
 <image src="../Images/Malware.Unknown.exe3.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
 <br>
 
-Now in Remnux machine, INetSim was runned for network simulation. After that the sample was executed again. 
+Now in Remnux machine, INetSim was runned for network simulation. 
 
-This time, the smaple try to reach ssl-6582datamanager[.]helpdeskbros[.]local and since the network was simulated, it resolve that domain and started connection over port 80.
+<image src="../Images/putty.exe7.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+After that the sample was executed again. This time, the sample again try to reach ssl-6582datamanager[.]helpdeskbros[.]local and successfully resolute to IP of the Remnux machine and start connection over port 80 as shown in Wireshark capture below.
+
+
+
+
+
 
 <br>
 

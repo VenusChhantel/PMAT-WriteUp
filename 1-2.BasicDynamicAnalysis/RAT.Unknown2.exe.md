@@ -90,9 +90,11 @@ When the sample fail to reach that domain, it terminated itself as shown in Proc
 
 <br>
 
-Now in Remnux machine, INetSim was runned for network simulation. After that the sample was executed again. 
+Now in Remnux machine, INetSim was runned for network simulation. 
 
-This time, the sample again try to reach aaaaaaaaaaaaaaaaaaaa[.]kadusus[.]local and successfully resolute to IP of the Remnux machine and start connection over port 443 as shown in Wireshark capture. 
+<image src="../Images/putty.exe7.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+After that the sample was executed again. This time, the sample again try to reach aaaaaaaaaaaaaaaaaaaa[.]kadusus[.]local and successfully resolute to IP of the Remnux machine and start connection over port 443 as shown in Wireshark capture. 
 
 <image src="../Images/RAT.Unknown2.exe4.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 

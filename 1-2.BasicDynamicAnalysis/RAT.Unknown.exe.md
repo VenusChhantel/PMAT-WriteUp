@@ -101,9 +101,11 @@ When the sample fail to reach that domain, it exited with message 'NO SOUP FOR Y
 
 <br>
 
-Now in Remnux machine, INetSim was runned for network simulation. After that the sample was executed again. 
+Now in Remnux machine, INetSim was runned for network simulation. 
 
-This time, the sample again try to reach serv1[.]ec2-102-95-13-2-ubuntu[.]local and successfully resolute to IP of the Remnux machine and start connection over port 80 and request 'msdcorelib.exe' as shown in Wireshark capture. 
+<image src="../Images/putty.exe7.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+After that the sample was executed again. This time, the sample again try to reach serv1[.]ec2-102-95-13-2-ubuntu[.]local and successfully resolute to IP of the Remnux machine and start connection over port 80 and request 'msdcorelib.exe' as shown in Wireshark capture. 
 
 <image src="../Images/RAT.Unknown.exe4.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
