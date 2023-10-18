@@ -280,4 +280,6 @@ In Process Monitor, use filter 'Operation Contains TCP'
 
 **Attempt to get the binary to initiate a shell on the localhost. Does a shell spawn? What is needed for a shell to spawn?**
 
-For shell to spawn, TLS handshake was needed to be handled. For this netcat was used with ssl option.
+For shell to spawn, TLS handshake was needed to be handled. For this netcat was used with ssl option as:
+
+`ncat -lvn --ssl 8443`
