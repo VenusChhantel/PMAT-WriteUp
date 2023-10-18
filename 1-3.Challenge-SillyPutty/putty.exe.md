@@ -173,6 +173,9 @@ Then the sample was executed again. This time the SSL connection was handled by 
 ## Network-based Indicators:
 - bonus2[.]corporatebonusapplication[.]local
 
+## Host-based Indicators:
+- The child powershell process spawned by putty which execute the base64 encoded Gzipped payload.
+
 <br>
 
 # Detection with YARA Rule:
@@ -193,29 +196,31 @@ Then the sample was executed again. This time the SSL connection was handled by 
                 )
         }
 
+<br>
+
 ## Challenge Questions:
 
 ### Basic Static Analysis
 
-*** What is the SHA256 hash of the sample? ***
+**What is the SHA256 hash of the sample?**
 
 0C82E654C09C8FD9FDF4899718EFA37670974C9EEC5A8FC18A167F93CEA6EE83
 
 <br>
 
-*** What architecture is this binary? ***
+**What architecture is this binary?**
 
 32-bit
 
 <br>
 
-*** Are there any results from submitting the SHA256 hash to VirusTotal? ***
+**Are there any results from submitting the SHA256 hash to VirusTotal?**
 
 58/71 flagged as malicious
 
 <br>
 
-*** Describe the results of pulling the strings from this binary. Record and describe any strings that are potentially interesting. Can any interesting information be extracted from the strings? ***
+**Describe the results of pulling the strings from this binary. Record and describe any strings that are potentially interesting. Can any interesting information be extracted from the strings?**
 
 One string was particularly suspicious as identified in static analysis, which is:
 
@@ -223,13 +228,13 @@ One string was particularly suspicious as identified in static analysis, which i
 
 <br>
 
-*** Describe the results of inspecting the IAT for this binary. Are there any imports worth noting? ***
+**Describe the results of inspecting the IAT for this binary. Are there any imports worth noting?**
 
 There were import APIs that were interesting like ShellExecute, GetClipboardData, RegCreateKeyExA, CreateMutexA and more, but they could also be used by legitimate putty.
 
 <br>
 
-*** Is it likely that this binary is packed? ***
+**Is it likely that this binary is packed?**
 
 Although the entropy of this sample was high, the raw size and virtual size of the .text section were similar. Also, meaningful strings and Import APIs were found. So, this does not seem to be packed.
 
@@ -237,42 +242,42 @@ Although the entropy of this sample was high, the raw size and virtual size of t
 
 ### Basic Dynamic Analysis
 
-*** Describe initial detonation. Are there any notable occurrences at first detonation? Without internet simulation? With internet simulation? ***
+**Describe initial detonation. Are there any notable occurrences at first detonation? Without internet simulation? With internet simulation?**
 
 During initial detonation without any internet simulation, a blue screen flashed for just a second and disappeared. Also, from Process Monitor capture, it was found that the putty spawn a powershell child process with the commands identified during string analysis. From Wireshark capture it was found that was trying to reach bonus2[.]corporatebonusapplication[.]local.
 
 During initial detonation with internet simulation, actions similar to that without internet simulation occur. Additionally, after resolution of bonus2[.]corporatebonusapplication[.]local, it initiate a reverse shell connection over port 8443 with SSL.
 
-*** From the host-based indicators perspective, what is the main payload that is initiated at detonation? What tool can you use to identify this? ***
+**From the host-based indicators perspective, what is the main payload that is initiated at detonation? What tool can you use to identify this?**
 
  From the host-based indicators perspective, the main payload that is initiated at detonation was the base64 encoded and Gzipped command executed by the powershell, which was spawned as child process by putty. 
 
 <br>
 
-*** What is the DNS record that is queried at detonation? ***
+**What is the DNS record that is queried at detonation?**
 
 bonus2[.]corporatebonusapplication[.]local
 
 <br>
 
-*** What is the callback port number at detonation? ***
+**What is the callback port number at detonation?**
 
 8443
 
 <br>
 
-*** What is the callback protocol at detonation? ***
+**What is the callback protocol at detonation?**
 
 SSL/TLS
 
 <br>
 
-*** How can you use host-based telemetry to identify the DNS record, port, and protocol? ***
+**How can you use host-based telemetry to identify the DNS record, port, and protocol?**
 
 In Process Monitor, use filter 'Operation Contains TCP'
 
 <br>
 
-*** Attempt to get the binary to initiate a shell on the localhost. Does a shell spawn? What is needed for a shell to spawn? ***
+**Attempt to get the binary to initiate a shell on the localhost. Does a shell spawn? What is needed for a shell to spawn?**
 
 For shell to spawn, TLS handshake was needed to be handled. For this netcat was used with ssl option.

@@ -139,10 +139,10 @@ A command 'whoami' was entered which again output base64 encoded value, which on
 
 ## Network-based Indicators:
 - serv1.ec2-102-95-13-2-ubuntu.local
+- The msdcorelib.exe requested over HTTP.
 
 ## Host-based Indicators:
-- mscordll.exe
-- msdcorelib.exe
+- The mscordll.exe dropped under startup folder.
 
 <br>
 
