@@ -107,13 +107,15 @@ After that the sample was executed again. This time, the sample again try to rea
 
 <image src="../Images/Dropper.DownloadFromURL.exe4.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
+<br>
+
 In the Process Monitor capture, it was found that the requested file favicon.ico was first cached temporarily. Also the sample had saved CR433101.dat.exe under Public Documents which could actually be the requested favicon.ico. This can be further verified during advanced dynamic analysis by debugging.
 
 <image src="../Images/Dropper.DownloadFromURL.exe5.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
 The CR433101.dat.exe dropped under Public Document was also verified.
 
-<image src="../Images/Dropper.DownloadFromURL.exe5.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+<image src="../Images/Dropper.DownloadFromURL.exe6.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
 This sample capabilities will be unraveled in detail in the following advanced analysis sections.
 
