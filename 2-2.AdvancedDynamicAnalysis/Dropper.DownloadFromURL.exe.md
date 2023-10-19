@@ -129,18 +129,18 @@ For the advanced static analysis of this sample, the sample was loaded in Cutter
 
 Let's drill down this code. This will later help in debugging as well during advanced dynamic analysis.
 
-- In this section of code, first call to InternetOpen can be seen which is using Mozilla user-agent to initiate network connection
-- Then call to URLDownloadToFile can be seen which is downloading its component resource from  hxxp[:]//ssl-6582datamanager[.]helpdeskbros[.]local/favicon[.]ico and saved it under C:\Users\Public\Documents\CR433101.dat.exe
-- Immediately after that, there is test eax, eax instruction (bitwise operation)
-- After that there is JNZ instruction, which will jump if not zero, i.e., jumps if ZF is not set (ZF=0)
+- In this section of code, first call to InternetOpen can be seen which is using Mozilla user-agent to initiate network connection.
+- Then call to URLDownloadToFile can be seen which is downloading its component resource from  hxxp[:]//ssl-6582datamanager[.]helpdeskbros[.]local/favicon[.]ico and saved it under C:\Users\Public\Documents\CR433101.dat.exe.
+- Immediately after that, there is test eax, eax instruction (bitwise operation).
+- After that there is JNZ instruction, which will jump if not zero, i.e., jumps if ZF is not set (ZF=0).
 - So after call to URLDownloadToFile:
-    - If fail to download, eax=1 so when test eax, eax (result is 1); ZF=0, jumps to loc_401142
-    - If successfully download, eax=0 so when test eax, eax (result is 0); ZF=1, so does not jump
+    - If fail to download, eax=1 so when test eax, eax (result is 1); ZF=0, jumps to [0x00401142].
+    - If successfully download, eax=0 so when test eax, eax (result is 0); ZF=1, so does not jump and continue to [0x004010e3].
 - If did not jump:
-    - There is call to InternetOpenURL to open  http://huskyhacks.dev
-    - After that, there is call to ShellExecute that checks the internet connectivity with ping and execute the dropped CR433101.dat.exe
+    - There is call to InternetOpenURL to open hxxp[:]//huskyhacks[.]dev.
+    - After that, there is call to ShellExecute that checks the internet connectivity with ping and execute the dropped CR433101.dat.exe.
 - If jumps:
-    - Checks internet connectivity with ping and then deletes iself
+    - Checks internet connectivity with ping and then deletes iself.
 
 <br>
 
