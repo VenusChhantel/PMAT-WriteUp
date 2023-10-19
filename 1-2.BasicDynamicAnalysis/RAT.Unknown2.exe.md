@@ -135,12 +135,13 @@ A command 'whoami' was entered which output the user of the infected Windows mac
                 description= "RAT.Unknown2.exe"
         strings:
 
-                $C2 = "aaaaaaaaaaaaaaaaaaaa.kadusus.local"
+                $C2_part1 = "kadusus"
+                $C2_part2 = ".local"
     
         condition:
                 uint16(0) == 0x5A4D and
                 (
-                        $C2
+                        2 of ($C2*)
                 )
         }
 

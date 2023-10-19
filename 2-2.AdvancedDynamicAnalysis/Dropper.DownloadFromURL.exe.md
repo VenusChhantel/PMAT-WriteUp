@@ -269,14 +269,10 @@ Here, on the right side, the parameters passed to CreateProcessW can be seen. Th
 
 ## Indicator of Compromise 
 
-### Host-based Indicators
-
-
 ### Network-based Indicators
+- hxxp[:]//ssl-6582datamanager.helpdeskbros.local/favicon.ico
+- hxxp[:]//huskyhacks[.]dev
 
-
-<br>
-
-## Detection with YARA Rule:
-
-
+### Host-based Indicators
+- The CR433101.dat.exe dropped under Public document.
+- In absence of network connectivity, the cmd.exe process spawned by sample that ping 1.1.1.1 one time and then deleted itself.
