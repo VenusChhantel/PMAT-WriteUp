@@ -157,13 +157,13 @@ In x32dbg, the sample was executed till it reach the breakpoint on InternetOpenW
 
 <image src="../Images/Dropper.DownloadFromURL.exe8.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
-HINTERNET InternetOpenW(
-  [in] LPCWSTR lpszAgent,
-  [in] DWORD   dwAccessType,
-  [in] LPCWSTR lpszProxy,
-  [in] LPCWSTR lpszProxyBypass,
-  [in] DWORD   dwFlags
-);
+    HINTERNET InternetOpenW(
+	    [in] LPCWSTR lpszAgent,
+	    [in] DWORD dwAccessType,
+	    [in] LPCWSTR lpszProxy,
+	    [in] LPCWSTR lpszProxyBypass,
+	    [in] DWORD dwFlags
+    );
 
 On the right side, the parameters passed to InternetOpenW can be seen where the first parameter was "Mozilla/5.0" which is the User Agent used to initate network connection.
 
@@ -173,21 +173,33 @@ After this it was again executed till next breakpoint on URLDownloadToFileW as s
 
 <image src="../Images/Dropper.DownloadFromURL.exe9.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
-HRESULT URLDownloadToFile(
-             LPUNKNOWN            pCaller,
-             LPCTSTR              szURL,
-             LPCTSTR              szFileName,
-  _Reserved_ DWORD                dwReserved,
-             LPBINDSTATUSCALLBACK lpfnCB
-);
+    HRESULT URLDownloadToFile(
+    	LPUNKNOWN pCaller,
+    	LPCTSTR szURL,
+    	LPCTSTR szFileName,
+    	_Reserved_ DWORD dwReserved,
+    	LPBINDSTATUSCALLBACK lpfnCB
+    );
 
 Again on the right side, the parameters passed to DownloadFromURL can be seen. The second parameter is the URL which is "hxxp[:]//ssl-6582datamanager.helpdeskbros.local/favicon.ico" and the third parameter is the file name which is "C:\\Users\\Public\\Documents\\CR433101.dat.exe". So the sample will reach out to ssl-6582datamanager[.]helpdeskbros[.]local and download favicon.ico and save it as CR433101.dat.exe under C:\Users\Public\Documents. The hypothesis during basic dynamic analysis of CR433101.dat.exe being the favicon.ico was true.
 
 <br>
 
-After this it was then jumped to user code. 
+In the Remnux machine, the INetSim machine was running to simulate the network so the sample should be able to download the remote resource. In the x32dbg, it was jumped to return value (eax) of this DownloadFromURL API, which was 0 . This mean the sample successfully downloaded the remote resource. If it had failed then the return value (eax) would be 1.
 
+<image src="../Images/Dropper.DownloadFromURL.exe10.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
+<br>
+
+After this it was then jumped to user code which landed on test instruction.  
+
+<image src="../Images/Dropper.DownloadFromURL.exe11.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+As mentioned before, the test instruction will perform AND operation. Also, the return value (eax) from DownloadFromURL was 0. The instruction test eax, eax will return 0 since 0 AND 0 is 0. So, the Zero Flag (ZF) will be 1 as shown in image below.
+
+<image src="../Images/Dropper.DownloadFromURL.exe12.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+The next instruction jne will execute the command 
 
 
 
