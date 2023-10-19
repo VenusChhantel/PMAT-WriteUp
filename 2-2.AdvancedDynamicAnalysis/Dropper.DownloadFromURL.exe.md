@@ -136,19 +136,60 @@ Let's drill down this code. This will later help in debugging as well during adv
 - So after call to URLDownloadToFile:
     - If fail to download, eax=1 so when test eax, eax (result is 1); ZF=0, jumps to [0x00401142].
     - If successfully download, eax=0 so when test eax, eax (result is 0); ZF=1, so does not jump and continue to [0x004010e3].
-- If did not jump:
+- If did not jump [0x004010e3]:
     - There is call to InternetOpenURL to open hxxp[:]//huskyhacks[.]dev.
     - After that, there is call to ShellExecute that checks the internet connectivity with ping and execute the dropped CR433101.dat.exe.
-- If jumps:
+- If jumps [0x00401142]:
     - Checks internet connectivity with ping and then deletes iself.
 
 <br>
 
 ### Advanced Dynamic Analysis:
 
+For the dynamic analysis, the sample was loaded in x32dbg. Then breakpoints were added in the interesting APIs identified during advanced static analysis.
 
+    bp InternetOpenW
+    bp URLDownloadToFileW
+    bp ShellExecuteW
+    bp CreateProcess
+
+In x32dbg, the sample was executed till it reach the breakpoint on InternetOpenW as shown below. 
+
+<image src="../Images/Dropper.DownloadFromURL.exe8.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+HINTERNET InternetOpenW(
+  [in] LPCWSTR lpszAgent,
+  [in] DWORD   dwAccessType,
+  [in] LPCWSTR lpszProxy,
+  [in] LPCWSTR lpszProxyBypass,
+  [in] DWORD   dwFlags
+);
+
+On the right side, the parameters passed to InternetOpenW can be seen where the first parameter was "Mozilla/5.0" which is the User Agent used to initate network connection.
 
 <br>
+
+After this it was again executed till next breakpoint on URLDownloadToFileW as shown below. 
+
+<image src="../Images/Dropper.DownloadFromURL.exe9.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+HRESULT URLDownloadToFile(
+             LPUNKNOWN            pCaller,
+             LPCTSTR              szURL,
+             LPCTSTR              szFileName,
+  _Reserved_ DWORD                dwReserved,
+             LPBINDSTATUSCALLBACK lpfnCB
+);
+
+Again on the right side, the parameters passed to DownloadFromURL can be seen. The second parameter is the URL which is "hxxp[:]//ssl-6582datamanager.helpdeskbros.local/favicon.ico" and the third parameter is the file name which is "C:\\Users\\Public\\Documents\\CR433101.dat.exe". So the sample will reach out to ssl-6582datamanager[.]helpdeskbros[.]local and download favicon.ico and save it as CR433101.dat.exe under C:\Users\Public\Documents. The hypothesis during basic dynamic analysis of CR433101.dat.exe being the favicon.ico was true.
+
+<br>
+
+After this it was then jumped to user code. 
+
+
+
+
 
 ## Indicator of Compromise 
 
