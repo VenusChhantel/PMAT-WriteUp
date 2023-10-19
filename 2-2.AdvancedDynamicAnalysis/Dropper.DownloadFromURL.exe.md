@@ -150,6 +150,7 @@ For the dynamic analysis, the sample was loaded in x32dbg. Then breakpoints were
 
     bp InternetOpenW
     bp URLDownloadToFileW
+    bp InternetOpenUrlW
     bp ShellExecuteW
     bp CreateProcess
 
@@ -199,9 +200,72 @@ As mentioned before, the test instruction will perform AND operation. Also, the 
 
 <image src="../Images/Dropper.DownloadFromURL.exe12.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
-The next instruction jne will execute the command 
+<br>
 
+The next instruction jne will not take the jump since ZF=1 (which is zero/equal) and continue the execution of instruction after it. Then, the program was then run till it hit the next breakpoint on InternetOpenUrlW as shown below.
 
+<image src="../Images/Dropper.DownloadFromURL.exe13.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+    HINTERNET InternetOpenUrlW(
+      [in] HINTERNET hInternet,
+      [in] LPCWSTR   lpszUrl,
+      [in] LPCWSTR   lpszHeaders,
+      [in] DWORD     dwHeadersLength,
+      [in] DWORD     dwFlags,
+      [in] DWORD_PTR dwContext
+    );
+
+Here, on the right side, the parameters passed to InternetOpenUrlW can be seen. The second parameter is the URL which is hxxp[:]//huskyhacks[.]dev. The sample will open this URL.
+
+<br>
+
+After this it was again executed till next breakpoint on ShellExecuteW as shown below. 
+
+<image src="../Images/Dropper.DownloadFromURL.exe14.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+    HINSTANCE ShellExecuteA(
+      [in, optional] HWND   hwnd,
+      [in, optional] LPCSTR lpOperation,
+      [in]           LPCSTR lpFile,
+      [in, optional] LPCSTR lpParameters,
+      [in, optional] LPCSTR lpDirectory,
+      [in]           INT    nShowCmd
+    );
+
+Again on the right side, the parameters passed to ShellExecuteW can be seen. The second parameter passed "open" is the operation that will be performed by this API. The operation performed will be on third parameter which is "ping 1.1.1.1 -n 1 -w 3000 > Nul & C:\\Users\\Public\\Documents\\CR433101.dat.exe". So the sample will ping 1.1.1.1 one time to check connectivity and then execute the previously dropped file CR433101.dat.exe.
+
+<br>
+
+Lets also verify this sample capability when there is no internet connectivity. This time the sample was again loaded in x32dbg but the INetSim was not runned on Remnux machine. This time the return value (eax) from DownloadfromURL call was a non-zero value as shown below.
+
+<image src="../Images/Dropper.DownloadFromURL.exe15.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+After this, the test instruction will perform AND operation.  Also, the return value (eax) from DownloadFromURL was a non zero. The instruction test eax, eax will return non-zero since non-zero AND non-zero is non-zero. So, the Zero Flag (ZF) will be 0 as shown in image below.
+
+<image src="../Images/Dropper.DownloadFromURL.exe16.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+<br>
+
+In this case, the next instruction jne will take the jump since ZF=0 (which is not zero/equal) and jumps to [0x00401142]. The sample was executed till it reach the next breakpoint on CreateProcessW as shown below.
+
+<image src="../Images/Dropper.DownloadFromURL.exe17.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+    BOOL CreateProcessA(
+      [in, optional]      LPCSTR                lpApplicationName,
+      [in, out, optional] LPSTR                 lpCommandLine,
+      [in, optional]      LPSECURITY_ATTRIBUTES lpProcessAttributes,
+      [in, optional]      LPSECURITY_ATTRIBUTES lpThreadAttributes,
+      [in]                BOOL                  bInheritHandles,
+      [in]                DWORD                 dwCreationFlags,
+      [in, optional]      LPVOID                lpEnvironment,
+      [in, optional]      LPCSTR                lpCurrentDirectory,
+      [in]                LPSTARTUPINFOA        lpStartupInfo,
+      [out]               LPPROCESS_INFORMATION lpProcessInformation
+    );
+
+Here, on the right side, the parameters passed to CreateProcessW can be seen. The second parameter is the commandline which is "cmd.exe /C ping 1.1.1.1 -n 1 -w 3000 > Nul & Del /f /q \"C:\\Users\\VENUS\\Desktop\\PMAT labs\\2-2.AdvancedDynamicAnalysis\\Dropper.DownloadFromURL.exe" which will ping 1.1.1.1 one time to check connectivity and delete itself.
+
+<br>
 
 ## Indicator of Compromise 
 
