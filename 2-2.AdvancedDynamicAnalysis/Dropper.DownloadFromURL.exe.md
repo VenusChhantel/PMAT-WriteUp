@@ -21,7 +21,7 @@ For the initial triage, the file was loaded in PEStudio as shown below.
 Followings were found:
 - The entropy of this sample was low (5.719 out of 8) so the sample is not packed.
 - The sample was written in C++
-- The sampole is 32-bit and has CLI interface.
+- The sample is 32-bit and has CLI interface.
 - The sample was compiled on Sat Sep 04 11:11:12 2021.
 
 <br>

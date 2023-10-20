@@ -20,7 +20,7 @@ For the initial triage, the sample was loaded in PEStudio as shown below.
 
 Followings were found:
 - The entropy of this sample was low (6.057 out of 8) so the sample is not packed.
-- The sampole is 64-bit and has GUI interface.
+- The sample is 64-bit and has GUI interface.
 - The sample was compiled on Sun Sep 12 09:30:09 2021.
 
 <br>

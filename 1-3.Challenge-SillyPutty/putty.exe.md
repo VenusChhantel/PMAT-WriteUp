@@ -20,7 +20,7 @@ For the initial triage, the sample was loaded in PEStudio as shown below.
 
 Followings were found:
 - The entropy of this sample was high (7.394 out of 8) so it could be packed.
-- The sampole is 32-bit and has GUI interface.
+- The sample is 32-bit and has GUI interface.
 - The sample was compiled on Sat Jul 10 02:51:55 2021.
 
 To verify more on if its packed, the virtual size and raw size of the .text sections of this sample were checked and was found to be similar as shown below. 
