@@ -120,7 +120,7 @@ After that the sample was executed again. This time, the sample again try to rea
 
 In the Process Monitor capture, it was found that the sample wrote passwrd.txt under Public directory. Then the sample seems to read the Cosmos.jpg from Desktop and also content from previously dropped passwrd.txt.
 
-<image src="../Images/unknown.exe4.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+<image src="../Images/unknown.exe5.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
 <br>
 
