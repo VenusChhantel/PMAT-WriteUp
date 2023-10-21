@@ -92,7 +92,9 @@ The interesting strings found were:
 
 - Strings relating to user agent, some passwrd.txt under Public and domain were found. 
 
-### Basic Dynamic Analysis:
+<br>
+
+### Basic Dynamic Analysis:b
 
 The sample was then executed for dynamic analysis. On execution, it try to reach update[.]ec12-4-109-278-3-ubuntu20-04[.]local as shown in the Wireshark capture below. Since the lab was isolated with no network simulation active, the resolution to that domain fail making the sample unable to reach it.
 
@@ -108,11 +110,27 @@ Now in Remnux machine, INetSim was runned for network simulation.
 
 <image src="../Images/putty.exe7.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
-After that the sample was executed again. This time, the sample again try to reach update[.]ec12-4-109-278-3-ubuntu20-04[.]local and successfully resolute to IP of the Remnux machine and start connection over port 
+<br>
+
+After that the sample was executed again. This time, the sample again try to reach update[.]ec12-4-109-278-3-ubuntu20-04[.]local and successfully resolute to IP of the Remnux machine and start connection over port 80. After successfully reaching it, the sample then again try to reach new domain cdn[.]altimiter[.]local. After resoluting the IP of that domain, it is sending something over HTTP POST request parameter as shown in Wireshark capture below.
 
 <image src="../Images/unknown.exe4.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
 
 <br>
 
-In the Process Monitor capture, it was found that 
+In the Process Monitor capture, it was found that the sample wrote passwrd.txt under Public directory. Then the sample seems to read the Cosmos.jpg from Desktop and also content from previously dropped passwrd.txt.
+
+<image src="../Images/unknown.exe4.png" caption="" alt="" height="" width="" position="center" command="fit" option="" class="img-fluid" title="" >
+
+<br>
+
+From the behavior identified, it can be said that the sample will drop passwrd.txt under Public directory. Then using it, the sample will perform some sort of encrypt on cosmos.jpg and exfiltrate over POST parameter to cdn[.]altimiter[.]local.
+
+Lets unravel the sample's capability more on advanced analysis on following section.
+
+<br>
+
+### Advanced Static Analysis:
+
+
 
